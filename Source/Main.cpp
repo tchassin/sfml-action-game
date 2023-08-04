@@ -3,6 +3,9 @@
 
 #include <windows.h>
 
+#include "Game.h"
+#include "GameObject.h"
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
     _In_ LPWSTR    lpCmdLine,
@@ -14,8 +17,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(nCmdShow);
 
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+
+    Game game;
+    GameObject gameObject(&game, "Knight", sf::IntRect(0, 0, 24, 24), sf::Vector2f(12, 12));
+    gameObject.getTransform().setPosition(sf::Vector2f(100, 100 ));
 
     while (window.isOpen())
     {
@@ -27,7 +32,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
 
         window.clear();
-        window.draw(shape);
+        window.draw(gameObject);
         window.display();
     }
 

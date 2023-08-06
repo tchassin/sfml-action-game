@@ -4,7 +4,7 @@
 #include <windows.h>
 
 #include "Game.h"
-#include "GameObject.h"
+#include "Character.h"
 #include "PlayerInput.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -21,10 +21,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
     window.setFramerateLimit(60);
+    window.setVerticalSyncEnabled(true);
 
     Game game;
-    GameObject gameObject(&game, "Knight", sf::IntRect(0, 0, 24, 24), sf::Vector2f(12, 12));
-    gameObject.getTransform().setPosition(sf::Vector2f(100, 100 ));
+    Character knight(&game, "Knight", sf::IntRect(0, 0, 24, 24), sf::Vector2f(12, 24));
+    knight.getTransform().setPosition(sf::Vector2f(100, 100 ));
+    knight.setRunningSpeed(120.0f);
+    knight.setHorizontalAirSpeed(120.0f);
+    knight.setJumpSpeed(360.0f);
+    knight.setFallSpeed(480.0f);
+    knight.setJumpHeight(120.0f);
 
     while (window.isOpen())
     {
@@ -40,21 +46,20 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         sf::Time deltaTime = clock.getElapsedTime();
         clock.restart();
 
-        const float speed = 64.0f * deltaTime.asSeconds();
+        const f32 speed = 64.0f * deltaTime.asSeconds();
 
+        sf::Vector2f movement;
         if (PlayerInput::isButtonDown(PlayerInput::Button::Left))
-            gameObject.getSprite().move(sf::Vector2f(-speed, 0));
-
+            movement.x -= 1.0f;
         if (PlayerInput::isButtonDown(PlayerInput::Button::Right))
-            gameObject.getSprite().move(sf::Vector2f(speed, 0));
+            movement.x += 1.0f;
+        if (PlayerInput::isButtonDown(PlayerInput::Button::A))
+            movement.y -= 1.0f;
 
-        if (PlayerInput::isButtonPressed(PlayerInput::Button::Left))
-            gameObject.getSprite().setScale(sf::Vector2f(-1, 1));
-        if (PlayerInput::isButtonPressed(PlayerInput::Button::Right))
-            gameObject.getSprite().setScale(sf::Vector2f(1, 1));
+        knight.move(movement, deltaTime);
 
         window.clear();
-        window.draw(gameObject);
+        window.draw(knight);
         window.display();
     }
 

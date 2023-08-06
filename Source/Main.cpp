@@ -24,7 +24,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     window.setVerticalSyncEnabled(true);
 
     Game game;
-    Character knight(&game, "Knight", sf::IntRect(0, 0, 24, 24), sf::Vector2f(12, 24));
+    Character knight(&game, "Knight", "Knight");
     knight.getTransform().setPosition(sf::Vector2f(100, 100 ));
     knight.setRunningSpeed(120.0f);
     knight.setHorizontalAirSpeed(120.0f);
@@ -57,6 +57,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             movement.y -= 1.0f;
 
         knight.move(movement, deltaTime);
+        knight.update(deltaTime);
 
         window.clear();
         window.draw(knight);

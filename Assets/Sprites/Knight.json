@@ -1,0 +1,76 @@
+{
+	"animations": [
+		{
+			"name": "Idle",
+			"looping": true,
+            "keyframes": [
+                {
+                    "x": -12,
+                    "y": -24,
+                    "duration": 300,
+                    "atlasX": 48,
+                    "atlasY": 24,
+                    "width": 24,
+                    "height": 24,
+                    "hitboxes": [
+                    ]
+                },
+                {
+                    "x": -12,
+                    "y": -24,
+                    "duration": 150,
+                    "atlasX": 48,
+                    "atlasY": 0,
+                    "width": 24,
+                    "height": 24,
+                    "hitboxes": [
+                    ]
+                },
+                {
+                    "x": -12,
+                    "y": -24,
+                    "duration": 150,
+                    "atlasX": 24,
+                    "atlasY": 24,
+                    "width": 24,
+                    "height": 24,
+                    "hitboxes": [
+                    ]
+                },
+                {
+                    "x": -12,
+                    "y": -24,
+                    "duration": 300,
+                    "atlasX": 24,
+                    "atlasY": 0,
+                    "width": 24,
+                    "height": 24,
+                    "hitboxes": [
+                    ]
+                },
+                {
+                    "x": -12,
+                    "y": -24,
+                    "duration": 150,
+                    "atlasX": 0,
+                    "atlasY": 24,
+                    "width": 24,
+                    "height": 24,
+                    "hitboxes": [
+                    ]
+                },
+                {
+                    "x": -12,
+                    "y": -24,
+                    "duration": 150,
+                    "atlasX": 0,
+                    "atlasY": 0,
+                    "width": 24,
+                    "height": 24,
+                    "hitboxes": [
+                    ]
+                }
+            ]
+		}
+	]
+}

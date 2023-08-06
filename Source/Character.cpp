@@ -1,18 +1,29 @@
 #include "Character.h"
 
+#include "Game.h"
+#include "AssetManager.h"
+
 namespace
 {
     constexpr f32 GRAVITY = 9.81f * 100.0f * 2.0f;
     constexpr f32 GROUND_HEIGHT = 200.0f;
 }
 
-Character::Character(Game* owner, const std::string& spritePath, sf::IntRect spriteRect, sf::Vector2f pivot)
-    : base(owner, spritePath, spriteRect, pivot)
+Character::Character(Game* owner, const std::string& spriteName, const std::string& animationName)
+    : base(owner, spriteName)
 {
+    m_animationController.setTarget(&getSprite());
+    m_animationController.setAnimations(*getOwner()->getAssetManager()->getAnimations(animationName));
+    m_animationController.PlayAnimation("Idle");
 }
 
 Character::~Character()
 {
+}
+
+void Character::update(sf::Time deltaTime)
+{
+    m_animationController.update(deltaTime);
 }
 
 void Character::move(sf::Vector2f offset, sf::Time deltaTime)

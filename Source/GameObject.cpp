@@ -1,13 +1,20 @@
 #include "GameObject.h"
 
 #include "Game.h"
+#include "AssetManager.h"
 
 #include <SFML/Graphics/RenderTarget.hpp>
+
+GameObject::GameObject(Game* owner, const std::string& spritePath)
+    : m_owner(owner)
+{
+    m_sprite.setTexture(*m_owner->getAssetManager()->getTexture(spritePath));
+}
 
 GameObject::GameObject(Game* owner, const std::string& spritePath, sf::IntRect spriteRect, sf::Vector2f pivot)
     : m_owner(owner)
 {
-    m_sprite.setTexture(*m_owner->getTexture(spritePath));
+    m_sprite.setTexture(*m_owner->getAssetManager()->getTexture(spritePath));
     m_sprite.setTextureRect(spriteRect);
     m_sprite.setOrigin(pivot);
 }

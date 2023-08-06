@@ -5,16 +5,18 @@
 #include <SFML/System/Time.hpp>
 
 #include "Types.h"
+#include "Animation.h"
 
 class Character : public GameObject
 {
     using base = GameObject;
 
 public:
-    Character(Game* owner, const std::string& spritePath, sf::IntRect spriteRect, sf::Vector2f pivot);
+    Character(Game* owner, const std::string& spriteName, const std::string& animationName);
     virtual ~Character();
 
 public:
+    void update(sf::Time deltaTime);
     void move(sf::Vector2f offset, sf::Time deltaTime);
 
     bool isFlipped() const { return getTransform().getScale().x < 0.0f; }
@@ -39,6 +41,7 @@ public:
     void setJumpHeight(f32 height) { m_maxJumpHeight = height; }
 
 private:
+    AnimationController m_animationController;
     f32 m_airTime = 0.0f;
     f32 m_runningSpeed = 0.0f;
     f32 m_horizontalAirSpeed = 0.0f;

@@ -1,9 +1,6 @@
 #pragma once
 
-#include<unordered_map>
-
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/Font.hpp>
+class AssetManager;
 
 class Game
 {
@@ -12,12 +9,9 @@ public:
     virtual ~Game();
 
 public:
-    const sf::Texture* getTexture(const std::string& localTexturePath) const;
+    const AssetManager* getAssetManager() const { return m_assetManager; }
 
 private:
-    bool loadTexture(const std::string& localTexturePath);
-
-private:
-    std::unordered_map<std::string, sf::Texture*> m_textures;
+    AssetManager* m_assetManager;
 };
 

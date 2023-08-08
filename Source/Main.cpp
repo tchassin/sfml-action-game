@@ -5,6 +5,7 @@
 
 #include <windows.h>
 
+#include "Config.h"
 #include "Game.h"
 #include "Character.h"
 #include "PlayerInput.h"
@@ -21,18 +22,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     sf::Clock clock;
 
-    sf::RenderWindow window(sf::VideoMode(240, 160), "SFML works!");
-    window.setFramerateLimit(60);
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "SFML works!");
+    window.setFramerateLimit(FRAMERATE);
     window.setVerticalSyncEnabled(true);
+
+    sf::View view(sf::FloatRect(0, 0, VIEWPORT_WIDTH, VIEWPORT_HEIGHT));
+    window.setView(view);
 
     Game game;
     Character knight(&game, "Knight", "Knight");
     knight.getTransform().setPosition(sf::Vector2f(100, 100 ));
     knight.setRunningSpeed(120.0f);
     knight.setHorizontalAirSpeed(120.0f);
-    knight.setJumpSpeed(360.0f);
-    knight.setFallSpeed(480.0f);
-    knight.setJumpHeight(120.0f);
+    knight.setJumpSpeed(240.0f);
+    knight.setFallSpeed(360.0f);
+    knight.setJumpHeight(80.0f);
 
     tmx::Map map;
     map.load("Assets/Data/Start.tmx");

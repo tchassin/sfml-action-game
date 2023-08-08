@@ -1,5 +1,6 @@
 #include "Character.h"
 
+#include "Config.h"
 #include "Game.h"
 #include "AssetManager.h"
 
@@ -54,7 +55,7 @@ void Character::move(sf::Vector2f offset, sf::Time deltaTime)
 
     // Move the character while staying on screen
     sf::Vector2f targetPosition = position + offset * deltaTime.asSeconds();
-    targetPosition.x = std::clamp(targetPosition.x, 0.0f, 200.0f);
+    targetPosition.x = std::clamp(targetPosition.x, 0.0f, (f32)VIEWPORT_WIDTH);
     targetPosition.y = std::clamp(targetPosition.y, 0.0f, GROUND_HEIGHT);
     getTransform().setPosition(targetPosition);
 

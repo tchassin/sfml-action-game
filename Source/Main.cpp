@@ -1,6 +1,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
+#include <tmxlite/SFMLOrthogonalLayer.hpp>
+
 #include <windows.h>
 
 #include "Game.h"
@@ -19,7 +21,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     sf::Clock clock;
 
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(240, 160), "SFML works!");
     window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(true);
 
@@ -31,6 +33,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     knight.setJumpSpeed(360.0f);
     knight.setFallSpeed(480.0f);
     knight.setJumpHeight(120.0f);
+
+    tmx::Map map;
+    map.load("Assets/Data/Start.tmx");
+    MapLayer skyTiles(map, 0);
+    MapLayer backgroundTiles(map, 1);
+    MapLayer foregroundTiles(map, 2);
 
     while (window.isOpen())
     {
@@ -60,7 +68,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         knight.update(deltaTime);
 
         window.clear();
+
+        window.draw(skyTiles);
+        window.draw(backgroundTiles);
+        window.draw(foregroundTiles);
+
         window.draw(knight);
+
         window.display();
     }
 

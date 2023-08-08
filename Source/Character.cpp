@@ -6,7 +6,7 @@
 namespace
 {
     constexpr f32 GRAVITY = 9.81f * 100.0f * 2.0f;
-    constexpr f32 GROUND_HEIGHT = 200.0f;
+    constexpr f32 GROUND_HEIGHT = 148.0f;
 }
 
 Character::Character(Game* owner, const std::string& spriteName, const std::string& animationName)

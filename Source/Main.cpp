@@ -47,18 +47,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         sf::Time deltaTime = clock.getElapsedTime();
         clock.restart();
 
-        const f32 speed = 64.0f * deltaTime.asSeconds();
-
-        sf::Vector2f movement;
-        if (PlayerInput::isButtonDown(PlayerInput::Button::Left))
-            movement.x -= 1.0f;
-        if (PlayerInput::isButtonDown(PlayerInput::Button::Right))
-            movement.x += 1.0f;
-        if (PlayerInput::isButtonDown(PlayerInput::Button::A))
-            movement.y -= 1.0f;
-
-        level.getPlayerCharacter()->move(movement, deltaTime);
-
         level.update(deltaTime);
 
         window.clear();

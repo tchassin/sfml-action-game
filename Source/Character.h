@@ -12,17 +12,26 @@ class Character : public GameObject
 {
     using base = GameObject;
 
+    enum class State : u8
+    {
+        Grounded,
+        Jumping,
+        Falling,
+    };
+
 public:
     Character(Game* owner, const std::string& spriteName, const std::string& animationName);
     virtual ~Character();
 
 public:
-    void update(sf::Time deltaTime);
+    virtual void update(sf::Time deltaTime);
+    void startJumping();
     void move(sf::Vector2f offset, sf::Time deltaTime);
 
     bool isFlipped() const { return getTransform().getScale().x < 0.0f; }
-    bool isGrounded() const { return m_isGrounded; }
-    bool isFalling() const { return !isGrounded() && m_verticalVelocity > -m_jumpSpeed; }
+    bool isGrounded() const { return m_state == State::Grounded; }
+    bool isFalling() const { return m_state == State::Falling; }
+    bool isJumping() const { return m_state == State::Jumping; }
 
     sf::Vector2f getForwardDirection() const { return sf::Vector2f(isFlipped() ? -1 : 1, 0); }
 
@@ -40,6 +49,9 @@ public:
 
     f32 getJumpHeight() const { return m_maxJumpHeight; }
     void setJumpHeight(f32 height) { m_maxJumpHeight = height; }
+
+    f32 getMinJumpHeight() const { return m_minJumpHeight; }
+    void setMinJumpHeight(f32 height) { m_minJumpHeight = height; }
 protected:
 #ifdef _DEBUG
     // Inherited via Drawable
@@ -54,8 +66,9 @@ private:
     f32 m_jumpSpeed = 0.0f;
     f32 m_verticalVelocity = 0.0f;
     f32 m_maxFallSpeed = 0.0f;
+    f32 m_minJumpHeight = 0.0f;
     f32 m_maxJumpHeight = 0.0f;
-    bool m_isGrounded = false;
+    State m_state = State::Falling;
 #ifdef _DEBUG
     sf::RectangleShape m_feetBoxRect;
     sf::RectangleShape m_hitBoxRect;

@@ -39,6 +39,12 @@ void Character::update(sf::Time deltaTime)
     m_animationController.update(deltaTime);
 }
 
+void Character::startJumping()
+{
+    m_state = State::Jumping;
+    m_verticalVelocity = -m_jumpSpeed;
+}
+
 void Character::move(sf::Vector2f offset, sf::Time deltaTime)
 {
     // Flip sprite to match current direction
@@ -49,7 +55,8 @@ void Character::move(sf::Vector2f offset, sf::Time deltaTime)
 
     // Handle jumping and falling
     offset.x *= isGrounded() ? m_runningSpeed : m_horizontalAirSpeed;
-    if (!isFalling() && offset.y < 0.0f)
+    const f32 minJumpDuration = m_minJumpHeight / m_jumpSpeed - m_jumpSpeed / GRAVITY;
+    if (isJumping() && (m_airTime < minJumpDuration || offset.y < 0))
     {
         offset.y = -m_jumpSpeed;
 
@@ -63,6 +70,8 @@ void Character::move(sf::Vector2f offset, sf::Time deltaTime)
     }
 
     m_verticalVelocity = offset.y;
+    if (m_verticalVelocity > -m_jumpSpeed)
+        m_state = State::Falling;
 
     const sf::Vector2f position = getTransform().getPosition();
     const sf::Vector2f frameOffset = offset * deltaTime.asSeconds();
@@ -93,7 +102,8 @@ void Character::move(sf::Vector2f offset, sf::Time deltaTime)
 
     // Check if the character is grounded or in the air
     const sf::FloatRect feetBox(position + sf::Vector2f(-4, 0), sf::Vector2f(8, 1));
-    m_isGrounded = getContaingLevel()->checkForCollisions(feetBox);
+    if (!isJumping())
+        m_state = getContaingLevel()->checkForCollisions(feetBox) ? State::Grounded : State::Falling;
 
     if (isGrounded())
     {
@@ -107,7 +117,7 @@ void Character::move(sf::Vector2f offset, sf::Time deltaTime)
 
 #ifdef _DEBUG
     m_feetBoxRect.setPosition(feetBox.getPosition());
-    m_feetBoxRect.setOutlineColor(m_isGrounded ? sf::Color::Blue : sf::Color::Red);
+    m_feetBoxRect.setOutlineColor(isGrounded() ? sf::Color::Blue : sf::Color::Red);
     m_hitBoxRect.setPosition(hitBox.getPosition());
 #endif // _DEBUG
 }

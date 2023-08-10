@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\PlayerCharacter.cpp" />
     <ClCompile Include="Source\Level.cpp" />
     <ClCompile Include="Source\AssetManager.cpp" />
     <ClCompile Include="Source\Animation.cpp" />
@@ -29,6 +30,7 @@
     <ClCompile Include="Source\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\PlayerCharacter.h" />
     <ClInclude Include="Source\Level.h" />
     <ClInclude Include="Source\AssetManager.h" />
     <ClInclude Include="Source\Animation.h" />

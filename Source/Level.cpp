@@ -1,18 +1,19 @@
 #include "Level.h"
 
-#include "Character.h"
+#include "PlayerCharacter.h"
 #include "Game.h"
 #include "Physics.h"
 
 
 Level::Level(Game* game)
 {
-    m_playerCharacter = new Character(game, "Knight", "Knight");
+    m_playerCharacter = new PlayerCharacter(game, "Knight", "Knight");
     m_playerCharacter->getTransform().setPosition(sf::Vector2f(120, 100));
     m_playerCharacter->setRunningSpeed(120.0f);
     m_playerCharacter->setHorizontalAirSpeed(120.0f);
     m_playerCharacter->setJumpSpeed(240.0f);
     m_playerCharacter->setFallSpeed(360.0f);
+    m_playerCharacter->setMinJumpHeight(32.0f);
     m_playerCharacter->setJumpHeight(80.0f);
     m_playerCharacter->moveToLevel(this);
 }

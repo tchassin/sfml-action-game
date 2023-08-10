@@ -9,7 +9,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #endif // _DEBUG
 
-class Character;
+class PlayerCharacter;
 class Game;
 
 class Level : public sf::Drawable
@@ -28,8 +28,8 @@ public:
     // Check if a moving bounding box will intersect with the level geometry
     SweepResult sweepForCollisions(const sf::FloatRect& box, const sf::Vector2f movement) const;
 
-    Character* getPlayerCharacter() { return m_playerCharacter; }
-    const Character* getPlayerCharacter() const { return m_playerCharacter; }
+    PlayerCharacter* getPlayerCharacter() { return m_playerCharacter; }
+    const PlayerCharacter* getPlayerCharacter() const { return m_playerCharacter; }
 
 protected:
     void clearMapLayers();
@@ -42,7 +42,7 @@ private:
     MapLayer* m_skyTiles = nullptr;
     MapLayer* m_backgroundTiles = nullptr;
     MapLayer* m_foregroundTiles = nullptr;
-    Character* m_playerCharacter = nullptr;
+    PlayerCharacter* m_playerCharacter = nullptr;
 #ifdef _DEBUG
     std::vector<sf::RectangleShape> m_debugRects;
 #endif // _DEBUG

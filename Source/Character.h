@@ -14,8 +14,13 @@ class Character : public GameObject
 
     enum class State : u8
     {
+        // The character is on the ground
         Grounded,
+        // The character is going upward at full speed
         Jumping,
+        // The character is going upward but losing momentum
+        Floating,
+        // The character is going downward
         Falling,
     };
 
@@ -31,6 +36,7 @@ public:
     bool isFlipped() const { return getTransform().getScale().x < 0.0f; }
     bool isGrounded() const { return m_state == State::Grounded; }
     bool isFalling() const { return m_state == State::Falling; }
+    bool isFloating() const { return m_state == State::Floating; }
     bool isJumping() const { return m_state == State::Jumping; }
 
     sf::Vector2f getForwardDirection() const { return sf::Vector2f(isFlipped() ? -1 : 1, 0); }

@@ -1,13 +1,12 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
-#include <tmxlite/SFMLOrthogonalLayer.hpp>
-
 #include <windows.h>
 
+#include "Character.h"
 #include "Config.h"
 #include "Game.h"
-#include "Character.h"
+#include "Level.h"
 #include "PlayerInput.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -30,19 +29,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     window.setView(view);
 
     Game game;
-    Character knight(&game, "Knight", "Knight");
-    knight.getTransform().setPosition(sf::Vector2f(100, 100 ));
-    knight.setRunningSpeed(120.0f);
-    knight.setHorizontalAirSpeed(120.0f);
-    knight.setJumpSpeed(240.0f);
-    knight.setFallSpeed(360.0f);
-    knight.setJumpHeight(80.0f);
 
-    tmx::Map map;
-    map.load("Assets/Data/Start.tmx");
-    MapLayer skyTiles(map, 0);
-    MapLayer backgroundTiles(map, 1);
-    MapLayer foregroundTiles(map, 2);
+    Level level(&game);
+    level.loadMap("Assets/Data/Start.tmx");
 
     while (window.isOpen())
     {
@@ -68,17 +57,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         if (PlayerInput::isButtonDown(PlayerInput::Button::A))
             movement.y -= 1.0f;
 
-        knight.move(movement, deltaTime);
-        knight.update(deltaTime);
+        level.getPlayerCharacter()->move(movement, deltaTime);
+
+        level.update(deltaTime);
 
         window.clear();
-
-        window.draw(skyTiles);
-        window.draw(backgroundTiles);
-        window.draw(foregroundTiles);
-
-        window.draw(knight);
-
+        window.draw(level);
         window.display();
     }
 

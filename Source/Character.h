@@ -6,6 +6,7 @@
 
 #include "Types.h"
 #include "Animation.h"
+#include <SFML/Graphics/RectangleShape.hpp>
 
 class Character : public GameObject
 {
@@ -20,7 +21,7 @@ public:
     void move(sf::Vector2f offset, sf::Time deltaTime);
 
     bool isFlipped() const { return getTransform().getScale().x < 0.0f; }
-    bool isGrounded() const { return m_airTime == 0.0f; }
+    bool isGrounded() const { return m_isGrounded; }
     bool isFalling() const { return !isGrounded() && m_verticalVelocity > -m_jumpSpeed; }
 
     sf::Vector2f getForwardDirection() const { return sf::Vector2f(isFlipped() ? -1 : 1, 0); }
@@ -39,6 +40,11 @@ public:
 
     f32 getJumpHeight() const { return m_maxJumpHeight; }
     void setJumpHeight(f32 height) { m_maxJumpHeight = height; }
+protected:
+#ifdef _DEBUG
+    // Inherited via Drawable
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+#endif // _DEBUG
 
 private:
     AnimationController m_animationController;
@@ -49,5 +55,10 @@ private:
     f32 m_verticalVelocity = 0.0f;
     f32 m_maxFallSpeed = 0.0f;
     f32 m_maxJumpHeight = 0.0f;
+    bool m_isGrounded = false;
+#ifdef _DEBUG
+    sf::RectangleShape m_feetBoxRect;
+    sf::RectangleShape m_hitBoxRect;
+#endif // _DEBUG
 };
 

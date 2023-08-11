@@ -3,11 +3,8 @@
 
 #include <windows.h>
 
-#include "Character.h"
 #include "Config.h"
 #include "Game.h"
-#include "Level.h"
-#include "PlayerInput.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -21,7 +18,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     sf::Clock clock;
 
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "SFML Action Game");
     window.setFramerateLimit(FRAMERATE);
     window.setVerticalSyncEnabled(true);
 
@@ -29,9 +26,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     window.setView(view);
 
     Game game;
-
-    Level level(&game);
-    level.loadMap("Assets/Data/Start.tmx");
+    game.loadLevel("Assets/Data/Start.tmx");
 
     while (window.isOpen())
     {
@@ -42,16 +37,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                 window.close();
         }
 
-        PlayerInput::update();
-
         sf::Time deltaTime = clock.getElapsedTime();
         clock.restart();
 
-        level.update(deltaTime);
-
-        window.clear();
-        window.draw(level);
-        window.display();
+        game.update(deltaTime);
+        game.draw(window);
     }
 
     return 0;

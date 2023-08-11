@@ -16,8 +16,9 @@ void AnimationFrameData::apply(sf::Sprite* target) const
     target->setTextureRect(m_textureRect);
 }
 
-AnimationData::AnimationData(const std::vector<AnimationFrameData>& frames, bool isLooping)
-    : m_frames(frames)
+AnimationData::AnimationData(const std::string& name, const std::vector<AnimationFrameData>& frames, bool isLooping)
+    : m_name(name)
+    , m_frames(frames)
     , m_isLooping(isLooping)
 {
 }
@@ -64,7 +65,7 @@ void Animation::update(sf::Time deltaTime, sf::Sprite* target)
 }
 
 AnimationController::AnimationController(sf::Sprite* target,
-        const std::unordered_map<std::string, const AnimationData*>& animations)
+    const std::unordered_map<std::string, const AnimationData*>& animations)
     : m_animations(animations)
     , m_target(target)
     , m_currentAnimation()
@@ -83,8 +84,11 @@ const AnimationData* AnimationController::getAnimationData(const std::string& an
     return result != m_animations.end() ? result->second : nullptr;
 }
 
-bool AnimationController::PlayAnimation(const std::string& animationName)
+bool AnimationController::play(const std::string& animationName)
 {
+    if (isPlaying(animationName))
+        return true;
+
     const AnimationData* animationData = getAnimationData(animationName);
 
     if (animationData == nullptr)
@@ -94,4 +98,10 @@ bool AnimationController::PlayAnimation(const std::string& animationName)
     m_currentAnimation.getCurrentFrame().apply(m_target);
 
     return true;
+}
+
+bool AnimationController::isPlaying(const std::string& animationName) const
+{
+    return (m_currentAnimation.getAnimationData() != nullptr)
+        && (m_currentAnimation.getAnimationData()->getName() == animationName);
 }

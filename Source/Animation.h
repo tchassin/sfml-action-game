@@ -36,9 +36,11 @@ private:
 class AnimationData
 {
 public:
-    AnimationData(const std::vector<AnimationFrameData>& frames, bool isLooping);
+    AnimationData(const std::string& name, const std::vector<AnimationFrameData>& frames, bool isLooping);
 
 public:
+    const std::string& getName() const { return m_name; }
+
     bool isLooping() const { return m_isLooping; }
 
     u32 getFrameCount() const { return m_frames.size(); }
@@ -47,6 +49,7 @@ public:
     f32 getDuration() const;
 
 private:
+    std::string m_name;
     std::vector<AnimationFrameData> m_frames;
     bool m_isLooping = false;
 };
@@ -88,7 +91,8 @@ public:
 
     const AnimationData* getAnimationData(const std::string& animationName) const;
     const AnimationData* getCurrentAnimationData() const { return m_currentAnimation.getAnimationData(); }
-    bool PlayAnimation(const std::string& animationName);
+    bool play(const std::string& animationName);
+    bool isPlaying(const std::string& animationName) const;
 
 private:
     sf::Sprite* m_target = nullptr;

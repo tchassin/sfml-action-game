@@ -1,6 +1,23 @@
 {
 	"animations": [
 		{
+			"name": "Fall",
+			"looping": true,
+            "keyframes": [
+                {
+                    "x": -12,
+                    "y": -24,
+                    "duration": 100,
+                    "atlasX": 24,
+                    "atlasY": 48,
+                    "width": 24,
+                    "height": 24,
+                    "hitboxes": [
+                    ]
+                }
+            ]
+		},
+		{
 			"name": "Idle",
 			"looping": true,
             "keyframes": [
@@ -8,7 +25,18 @@
                     "x": -12,
                     "y": -24,
                     "duration": 300,
-                    "atlasX": 48,
+                    "atlasX": 96,
+                    "atlasY": 24,
+                    "width": 24,
+                    "height": 24,
+                    "hitboxes": [
+                    ]
+                },
+                {
+                    "x": -12,
+                    "y": -24,
+                    "duration": 150,
+                    "atlasX": 72,
                     "atlasY": 24,
                     "width": 24,
                     "height": 24,
@@ -20,17 +48,6 @@
                     "y": -24,
                     "duration": 150,
                     "atlasX": 48,
-                    "atlasY": 0,
-                    "width": 24,
-                    "height": 24,
-                    "hitboxes": [
-                    ]
-                },
-                {
-                    "x": -12,
-                    "y": -24,
-                    "duration": 150,
-                    "atlasX": 24,
                     "atlasY": 24,
                     "width": 24,
                     "height": 24,
@@ -42,17 +59,6 @@
                     "y": -24,
                     "duration": 300,
                     "atlasX": 24,
-                    "atlasY": 0,
-                    "width": 24,
-                    "height": 24,
-                    "hitboxes": [
-                    ]
-                },
-                {
-                    "x": -12,
-                    "y": -24,
-                    "duration": 150,
-                    "atlasX": 0,
                     "atlasY": 24,
                     "width": 24,
                     "height": 24,
@@ -63,8 +69,108 @@
                     "x": -12,
                     "y": -24,
                     "duration": 150,
+                    "atlasX": 96,
+                    "atlasY": 0,
+                    "width": 24,
+                    "height": 24,
+                    "hitboxes": [
+                    ]
+                },
+                {
+                    "x": -12,
+                    "y": -24,
+                    "duration": 150,
+                    "atlasX": 72,
+                    "atlasY": 0,
+                    "width": 24,
+                    "height": 24,
+                    "hitboxes": [
+                    ]
+                }
+            ]
+		},
+		{
+			"name": "Jump",
+			"looping": true,
+            "keyframes": [
+                {
+                    "x": -12,
+                    "y": -32,
+                    "duration": 100,
                     "atlasX": 0,
                     "atlasY": 0,
+                    "width": 24,
+                    "height": 32,
+                    "hitboxes": [
+                    ]
+                }
+            ]
+		},
+		{
+			"name": "Run",
+			"looping": true,
+            "keyframes": [
+                {
+                    "x": -12,
+                    "y": -24,
+                    "duration": 80,
+                    "atlasX": 48,
+                    "atlasY": 0,
+                    "width": 24,
+                    "height": 24,
+                    "hitboxes": [
+                    ]
+                },
+                {
+                    "x": -12,
+                    "y": -24,
+                    "duration": 80,
+                    "atlasX": 24,
+                    "atlasY": 0,
+                    "width": 24,
+                    "height": 24,
+                    "hitboxes": [
+                    ]
+                },
+                {
+                    "x": -12,
+                    "y": -24,
+                    "duration": 130,
+                    "atlasX": 0,
+                    "atlasY": 104,
+                    "width": 24,
+                    "height": 24,
+                    "hitboxes": [
+                    ]
+                },
+                {
+                    "x": -12,
+                    "y": -24,
+                    "duration": 80,
+                    "atlasX": 0,
+                    "atlasY": 80,
+                    "width": 24,
+                    "height": 24,
+                    "hitboxes": [
+                    ]
+                },
+                {
+                    "x": -12,
+                    "y": -24,
+                    "duration": 80,
+                    "atlasX": 0,
+                    "atlasY": 56,
+                    "width": 24,
+                    "height": 24,
+                    "hitboxes": [
+                    ]
+                },
+                {
+                    "x": -12,
+                    "y": -24,
+                    "duration": 130,
+                    "atlasX": 0,
+                    "atlasY": 32,
                     "width": 24,
                     "height": 24,
                     "hitboxes": [

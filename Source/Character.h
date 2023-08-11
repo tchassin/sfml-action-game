@@ -6,7 +6,6 @@
 
 #include "Types.h"
 #include "Animation.h"
-#include <SFML/Graphics/RectangleShape.hpp>
 
 class Character : public GameObject
 {
@@ -75,9 +74,15 @@ private:
     f32 m_minJumpHeight = 0.0f;
     f32 m_maxJumpHeight = 0.0f;
     State m_state = State::Falling;
+
+    // Axis-Aligned Bounding Box (AABB) used to detect ground
+    sf::FloatRect m_groundCheckBox;
+    // Axis-Aligned Bounding Boxes (AABB) used to detect attack hits
+    // N.B.: There can be multiple to represent more complex shapes
+    std::vector<sf::FloatRect> m_hurtBoxes;
+
 #ifdef _DEBUG
-    sf::RectangleShape m_feetBoxRect;
-    sf::RectangleShape m_hitBoxRect;
+    sf::RectangleShape m_feetBoxDebugRect;
+    std::vector<sf::RectangleShape> m_hurtBoxDebugRects;
 #endif // _DEBUG
 };
-

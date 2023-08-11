@@ -65,7 +65,7 @@ bool AssetManager::loadAnimations(const std::string& localPath, const std::strin
                 frames.emplace_back(duration, sf::Vector2f(-x, -y), sf::IntRect(atlasX, atlasY, width, height));
             }
 
-            animations.emplace(name, new AnimationData(frames, isLooping));
+            animations.emplace(name, new AnimationData(name, frames, isLooping));
         }
 
         m_animations[assetName] = animations;
@@ -96,4 +96,3 @@ bool AssetManager::loadTexture(const std::string& localPath, const std::string& 
 
     return true;
 }
-

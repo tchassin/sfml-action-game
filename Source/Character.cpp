@@ -8,6 +8,10 @@
 namespace
 {
     constexpr f32 GRAVITY = 9.81f * 100.0f * 2.0f;
+    const std::string IDLE_ANIMATION = "Idle";
+    const std::string RUN_ANIMATION = "Run";
+    const std::string JUMP_ANIMATION = "Jump";
+    const std::string FALL_ANIMATION = "Fall";
 }
 
 Character::Character(Game* owner, const std::string& spriteName, const std::string& animationName)
@@ -15,7 +19,7 @@ Character::Character(Game* owner, const std::string& spriteName, const std::stri
 {
     m_animationController.setTarget(&getSprite());
     m_animationController.setAnimations(*getOwner()->getAssetManager()->getAnimations(animationName));
-    m_animationController.PlayAnimation("Idle");
+    m_animationController.play(IDLE_ANIMATION);
 
 #ifdef _DEBUG
     m_feetBoxRect.setFillColor(sf::Color::Transparent);
@@ -43,6 +47,7 @@ void Character::startJumping()
 {
     m_state = State::Jumping;
     m_verticalVelocity = -m_jumpSpeed;
+    m_animationController.play(JUMP_ANIMATION);
 }
 
 void Character::move(sf::Vector2f offset, sf::Time deltaTime)
@@ -76,7 +81,10 @@ void Character::move(sf::Vector2f offset, sf::Time deltaTime)
 
     // Update state based on velocity after jumping is over
     if (!isGrounded() && m_verticalVelocity > -m_jumpSpeed)
+    {
         m_state = (m_verticalVelocity > 0) ? State::Falling : State::Floating;
+            m_animationController.play(FALL_ANIMATION);
+    }
 
     const sf::Vector2f position = getTransform().getPosition();
     const sf::Vector2f frameOffset = offset * deltaTime.asSeconds();
@@ -117,6 +125,10 @@ void Character::move(sf::Vector2f offset, sf::Time deltaTime)
     {
         m_airTime = 0.0f;
         m_verticalVelocity = 0.0f;
+        if (offset.x != 0)
+            m_animationController.play(RUN_ANIMATION);
+        else
+            m_animationController.play(IDLE_ANIMATION);
     }
     else
     {

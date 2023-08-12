@@ -17,7 +17,7 @@ void PlayerCharacter::update(sf::Time deltaTime)
     {
         if (PlayerInput::isButtonPressed(PlayerInput::Button::A))
         {
-            startJumping();
+            jump();
             movement.y -= 1.0f;
         }
     }

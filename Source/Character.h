@@ -29,7 +29,7 @@ public:
 
 public:
     virtual void update(sf::Time deltaTime);
-    void startJumping();
+    void jump();
     void move(sf::Vector2f offset, sf::Time deltaTime);
 
     bool isFlipped() const { return getTransform().getScale().x < 0.0f; }
@@ -57,7 +57,10 @@ public:
 
     f32 getMinJumpHeight() const { return m_minJumpHeight; }
     void setMinJumpHeight(f32 height) { m_minJumpHeight = height; }
+
 protected:
+    void updateHitBoxes();
+
 #ifdef _DEBUG
     // Inherited via Drawable
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -65,6 +68,7 @@ protected:
 
 private:
     AnimationController m_animationController;
+
     f32 m_airTime = 0.0f;
     f32 m_runningSpeed = 0.0f;
     f32 m_horizontalAirSpeed = 0.0f;
@@ -73,13 +77,13 @@ private:
     f32 m_maxFallSpeed = 0.0f;
     f32 m_minJumpHeight = 0.0f;
     f32 m_maxJumpHeight = 0.0f;
-    State m_state = State::Falling;
 
     // Axis-Aligned Bounding Box (AABB) used to detect ground
-    sf::FloatRect m_groundCheckBox;
+    sf::FloatRect m_feetBox;
     // Axis-Aligned Bounding Boxes (AABB) used to detect attack hits
     // N.B.: There can be multiple to represent more complex shapes
     std::vector<sf::FloatRect> m_hurtBoxes;
+    State m_state = State::Falling;
 
 #ifdef _DEBUG
     sf::RectangleShape m_feetBoxDebugRect;

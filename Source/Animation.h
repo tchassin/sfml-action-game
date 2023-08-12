@@ -18,19 +18,25 @@ namespace sf
 class AnimationFrameData
 {
 public:
-    AnimationFrameData(f32 duration, sf::Vector2f position, sf::IntRect textureRect);
+    AnimationFrameData(f32 duration, sf::Vector2f position, sf::IntRect textureRect,
+        const sf::FloatRect& hitbox, const sf::FloatRect& feetBox, const std::vector<sf::FloatRect>& hurtBoxes);
 
 public:
     void apply(sf::Sprite* target) const;
 
 public:
     f32 getDuration() const { return m_duration; }
+    const sf::FloatRect& getHitBox() const { return m_hitBox; }
+    const sf::FloatRect& getFeetBox() const { return m_feetBox; }
+    const std::vector<sf::FloatRect>& getHurtBoxes() const { return m_hurtBoxes; }
 
 private:
     f32 m_duration = 0;
     sf::Vector2f m_position;
     sf::IntRect m_textureRect;
-    // TODO: Add hitboxes
+    sf::FloatRect m_hitBox;
+    sf::FloatRect m_feetBox;
+    std::vector<sf::FloatRect> m_hurtBoxes;
 };
 
 class AnimationData
@@ -61,7 +67,8 @@ public:
     Animation(const AnimationData* data);
 
 public:
-    void update(sf::Time deltaTime, sf::Sprite* target);
+    // Update the current animation, return true if the frame has changed
+    bool update(sf::Time deltaTime, sf::Sprite* target);
 
     void reset() { m_frameIndex = 0; m_time = 0; }
     void reset(const AnimationData* data) { m_data = data; reset(); }
@@ -84,15 +91,18 @@ public:
     AnimationController(sf::Sprite* target,
         const std::unordered_map<std::string, const AnimationData*>& animations);
 
+    // Update the current animation, return true if the frame has changed
+    bool update(sf::Time deltaTime);
+
+    bool play(const std::string& animationName);
+    bool isPlaying(const std::string& animationName) const;
+
     void setTarget(sf::Sprite* target) { m_target = target; }
     void setAnimations(const std::unordered_map<std::string, const AnimationData*>& animations) { m_animations = animations; }
 
-    void update(sf::Time deltaTime);
-
     const AnimationData* getAnimationData(const std::string& animationName) const;
     const AnimationData* getCurrentAnimationData() const { return m_currentAnimation.getAnimationData(); }
-    bool play(const std::string& animationName);
-    bool isPlaying(const std::string& animationName) const;
+    const AnimationFrameData& getCurrentFrame() const { return m_currentAnimation.getCurrentFrame(); }
 
 private:
     sf::Sprite* m_target = nullptr;

@@ -8,6 +8,7 @@
 namespace
 {
     constexpr f32 GRAVITY = 9.81f * 100.0f * 2.0f;
+
     const std::string IDLE_ANIMATION = "Idle";
     const std::string RUN_ANIMATION = "Run";
     const std::string JUMP_ANIMATION = "Jump";
@@ -21,16 +22,12 @@ Character::Character(Game* owner, const std::string& spriteName, const std::stri
     m_animationController.setAnimations(*getOwner()->getAssetManager()->getAnimations(animationName));
     m_animationController.play(IDLE_ANIMATION);
 
-#ifdef _DEBUG
-    m_feetBoxRect.setFillColor(sf::Color::Transparent);
-    m_feetBoxRect.setOutlineThickness(1);
-    m_feetBoxRect.setOutlineColor(sf::Color::Magenta);
-    m_feetBoxRect.setSize(sf::Vector2f(8, 2));
+    updateHitBoxes();
 
-    m_hitBoxRect.setFillColor(sf::Color::Transparent);
-    m_hitBoxRect.setOutlineThickness(1);
-    m_hitBoxRect.setOutlineColor(sf::Color::White);
-    m_hitBoxRect.setSize(sf::Vector2f(10, 18));
+#ifdef _DEBUG
+    m_feetBoxDebugRect.setFillColor(sf::Color::Transparent);
+    m_feetBoxDebugRect.setOutlineThickness(1);
+    m_feetBoxDebugRect.setOutlineColor(sf::Color::Blue);
 #endif // _DEBUG
 }
 
@@ -40,10 +37,14 @@ Character::~Character()
 
 void Character::update(sf::Time deltaTime)
 {
-    m_animationController.update(deltaTime);
+    const bool hasChangeFrame = m_animationController.update(deltaTime);
+
+    if (!hasChangeFrame)
+        return;
+    updateHitBoxes();
 }
 
-void Character::startJumping()
+void Character::jump()
 {
     m_state = State::Jumping;
     m_verticalVelocity = -m_jumpSpeed;
@@ -83,21 +84,21 @@ void Character::move(sf::Vector2f offset, sf::Time deltaTime)
     if (!isGrounded() && m_verticalVelocity > -m_jumpSpeed)
     {
         m_state = (m_verticalVelocity > 0) ? State::Falling : State::Floating;
-            m_animationController.play(FALL_ANIMATION);
+        m_animationController.play(FALL_ANIMATION);
     }
 
     const sf::Vector2f position = getTransform().getPosition();
     const sf::Vector2f frameOffset = offset * deltaTime.asSeconds();
 
     SweepResult collision;
-    const sf::FloatRect feetBox(position + sf::Vector2f(-4, 0), sf::Vector2f(8, 1));
-    const sf::FloatRect hitBox(position + sf::Vector2f(-5, -18), sf::Vector2f(10, 18));
     if (!isJumping() && !isFloating())
     {
         // Check if the character is grounded or in the air
-        m_state = getContaingLevel()->checkForCollisions(feetBox) ? State::Grounded : State::Falling;
+        const sf::FloatRect currentFeetBox(position + m_feetBox.getPosition(), m_feetBox.getSize());
+        m_state = getContaingLevel()->checkForCollisions(currentFeetBox) ? State::Grounded : State::Falling;
         // Check for collisions only if the character going down up to pass through platforms
-        collision = getContaingLevel()->sweepForCollisions(hitBox, frameOffset);
+        const sf::FloatRect currentHitBox(position + getHitBox().getPosition(), getHitBox().getSize());
+        collision = getContaingLevel()->sweepForCollisions(currentHitBox, frameOffset);
     }
 
     // Handle collisions by sliding against the collided edge
@@ -136,17 +137,44 @@ void Character::move(sf::Vector2f offset, sf::Time deltaTime)
     }
 
 #ifdef _DEBUG
-    m_feetBoxRect.setPosition(feetBox.getPosition());
-    m_feetBoxRect.setOutlineColor(isGrounded() ? sf::Color::Blue : isFalling() ? sf::Color::Red : sf::Color::Yellow);
-    m_hitBoxRect.setPosition(hitBox.getPosition());
+    m_hitBoxDebugRect.setPosition(position + getHitBox().getPosition());
+    m_feetBoxDebugRect.setPosition(position + m_feetBox.getPosition());
+    for (u8 i = 0; i < m_hurtBoxes.size(); i++)
+        m_hurtBoxDebugRects[i].setPosition(position + m_hurtBoxes[i].getPosition());
+#endif // _DEBUG
+}
+
+void Character::updateHitBoxes()
+{
+    const AnimationFrameData& currentFrame = m_animationController.getCurrentFrame();
+    setHitBox(currentFrame.getHitBox());
+    m_feetBox = currentFrame.getFeetBox();
+    m_hurtBoxes = currentFrame.getHurtBoxes();
+
+#ifdef _DEBUG
+    m_feetBoxDebugRect.setSize(m_feetBox.getSize());
+
+    const sf::Vector2f position = getTransform().getPosition();
+
+    m_hurtBoxDebugRects.clear();
+    for (const auto& hurtBox : m_hurtBoxes)
+    {
+        sf::RectangleShape& debugRect = m_hurtBoxDebugRects.emplace_back(hurtBox.getSize());
+        debugRect.setFillColor(sf::Color::Transparent);
+        debugRect.setOutlineThickness(1);
+        debugRect.setOutlineColor(sf::Color::Red);
+        debugRect.setPosition(position + hurtBox.getPosition());
+    }
 #endif // _DEBUG
 }
 
 #ifdef _DEBUG
+
 void Character::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     base::draw(target, states);
-    target.draw(m_feetBoxRect, states);
-    target.draw(m_hitBoxRect, states);
+    target.draw(m_feetBoxDebugRect, states);
+    for (const auto& hurtBoxDebugRect : m_hurtBoxDebugRects)
+        target.draw(hurtBoxDebugRect, states);
 }
 #endif // _DEBUG

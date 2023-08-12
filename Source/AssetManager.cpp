@@ -62,7 +62,26 @@ bool AssetManager::loadAnimations(const std::string& localPath, const std::strin
                 const i32 height = jsonFrame.at("height");
                 const i32 atlasX = jsonFrame.at("atlasX");
                 const i32 atlasY = jsonFrame.at("atlasY");
-                frames.emplace_back(duration, sf::Vector2f(-x, -y), sf::IntRect(atlasX, atlasY, width, height));
+                sf::FloatRect hitBox;
+                sf::FloatRect feetBox;
+                std::vector<sf::FloatRect> hurtBoxes;
+                for (const auto& jsonHitBox : jsonFrame.at("hitboxes"))
+                {
+                    const std::string name = jsonHitBox.at("name");
+                    const f32 hitBoxX = jsonHitBox.at("x");
+                    const f32 hitBoxY = jsonHitBox.at("y");
+                    const f32 hitBoxWidth = jsonHitBox.at("width");
+                    const f32 hitBoxHeight = jsonHitBox.at("height");
+
+                    if (name == "Hitbox")
+                        hitBox = sf::FloatRect(hitBoxX, hitBoxY, hitBoxWidth, hitBoxHeight);
+                    else if (name == "Feet")
+                        feetBox = sf::FloatRect(hitBoxX, hitBoxY, hitBoxWidth, hitBoxHeight);
+                    else
+                        hurtBoxes.emplace_back(hitBoxX, hitBoxY, hitBoxWidth, hitBoxHeight);
+                }
+
+                frames.emplace_back(duration, sf::Vector2f(-x, -y), sf::IntRect(atlasX, atlasY, width, height), hitBox, feetBox, hurtBoxes);
             }
 
             animations.emplace(name, new AnimationData(name, frames, isLooping));

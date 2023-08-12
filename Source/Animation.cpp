@@ -2,10 +2,14 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 
-AnimationFrameData::AnimationFrameData(f32 duration, sf::Vector2f position, sf::IntRect textureRect)
+AnimationFrameData::AnimationFrameData(f32 duration, sf::Vector2f position, sf::IntRect textureRect,
+    const sf::FloatRect& hitbox, const sf::FloatRect& feetBox, const std::vector<sf::FloatRect>& hurtBoxes)
     : m_position(position)
     , m_textureRect(textureRect)
     , m_duration(duration)
+    , m_hitBox(hitbox)
+    , m_feetBox(feetBox)
+    , m_hurtBoxes(hurtBoxes)
 {
 }
 
@@ -38,10 +42,10 @@ Animation::Animation(const AnimationData* data)
 {
 }
 
-void Animation::update(sf::Time deltaTime, sf::Sprite* target)
+bool Animation::update(sf::Time deltaTime, sf::Sprite* target)
 {
     if (isOver())
-        return;
+        return false;
 
     m_time += deltaTime.asSeconds();
 
@@ -60,8 +64,12 @@ void Animation::update(sf::Time deltaTime, sf::Sprite* target)
         frameDuration = getCurrentFrame().getDuration();
     }
 
-    if (lastFrameIndex != m_frameIndex)
-        getCurrentFrame().apply(target);
+    if (lastFrameIndex == m_frameIndex)
+        return false;
+
+    getCurrentFrame().apply(target);
+
+    return true;
 }
 
 AnimationController::AnimationController(sf::Sprite* target,
@@ -72,9 +80,9 @@ AnimationController::AnimationController(sf::Sprite* target,
 {
 }
 
-void AnimationController::update(sf::Time deltaTime)
+bool AnimationController::update(sf::Time deltaTime)
 {
-    m_currentAnimation.update(deltaTime, m_target);
+    return m_currentAnimation.update(deltaTime, m_target);
 }
 
 const AnimationData* AnimationController::getAnimationData(const std::string& animationName) const

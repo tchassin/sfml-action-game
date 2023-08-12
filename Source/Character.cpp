@@ -1,9 +1,10 @@
 #include "Character.h"
 
+#include "AssetManager.h"
 #include "Config.h"
 #include "Game.h"
 #include "Level.h"
-#include "AssetManager.h"
+#include "Math.h"
 
 namespace
 {
@@ -55,9 +56,15 @@ void Character::move(sf::Vector2f offset, sf::Time deltaTime)
 {
     // Flip sprite to match current direction
     if (offset.x < 0.0f && !isFlipped())
+    {
         getTransform().setScale(-1, 1);
+        flipHitBoxes();
+    }
     else if (offset.x > 0.0f && isFlipped())
+    {
         getTransform().setScale(1, 1);
+        flipHitBoxes();
+    }
 
     // Handle jumping and falling
     offset.x *= isGrounded() ? m_runningSpeed : m_horizontalAirSpeed;
@@ -105,12 +112,13 @@ void Character::move(sf::Vector2f offset, sf::Time deltaTime)
     sf::Vector2f targetPosition;
     if (collision.hitTime < INFINITY && collision.hitNormal.y < 0)
     {
-        const f32 dotProduct = (frameOffset.x * collision.hitNormal.y + frameOffset.y * collision.hitNormal.x);
-        const sf::Vector2f slideOffset = sf::Vector2f(collision.hitNormal.y, collision.hitNormal.x) * dotProduct;
+        const sf::Vector2f slidingDirection(collision.hitNormal.y, collision.hitNormal.x);
+        const f32 slidingLength = dotProduct(frameOffset, slidingDirection);
+        const sf::Vector2f slidingOffset = slidingDirection * slidingLength;
         const sf::Vector2f hitPoint = position + frameOffset * collision.hitTime;
         // There should be more complex checks to make sure this does not cause additional collisions
         // but since the level geometry is simple enough, it is not necessary
-        targetPosition = hitPoint + slideOffset * (1.0f - collision.hitTime);
+        targetPosition = hitPoint + slidingOffset * (1.0f - collision.hitTime);
     }
     else
     {
@@ -151,6 +159,9 @@ void Character::updateHitBoxes()
     m_feetBox = currentFrame.getFeetBox();
     m_hurtBoxes = currentFrame.getHurtBoxes();
 
+    if (isFlipped())
+        flipHitBoxes();
+
 #ifdef _DEBUG
     m_feetBoxDebugRect.setSize(m_feetBox.getSize());
 
@@ -166,6 +177,15 @@ void Character::updateHitBoxes()
         debugRect.setPosition(position + hurtBox.getPosition());
     }
 #endif // _DEBUG
+}
+
+void Character::flipHitBoxes()
+{
+    setHitBox(flipRect(getHitBox()));
+    m_feetBox = flipRect(m_feetBox);
+
+    for (auto& hurtBox : m_hurtBoxes)
+        hurtBox = flipRect(hurtBox);
 }
 
 #ifdef _DEBUG

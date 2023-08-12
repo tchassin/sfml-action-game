@@ -30,6 +30,7 @@
     <ClCompile Include="Source\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Math.h" />
     <ClInclude Include="Source\PlayerCharacter.h" />
     <ClInclude Include="Source\Level.h" />
     <ClInclude Include="Source\AssetManager.h" />

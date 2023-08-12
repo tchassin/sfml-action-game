@@ -107,6 +107,7 @@ public:
 private:
     sf::Sprite* m_target = nullptr;
     std::unordered_map<std::string, const AnimationData*> m_animations;
+    f32 m_currentAnimationTime = 0.0f;
     Animation m_currentAnimation;
 };
 

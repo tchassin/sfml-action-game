@@ -14,6 +14,7 @@ namespace
     const std::string RUN_ANIMATION = "Run";
     const std::string JUMP_ANIMATION = "Jump";
     const std::string FALL_ANIMATION = "Fall";
+    const std::string ATTACK_ANIMATION = "Attack";
 }
 
 Character::Character(Game* owner, const std::string& spriteName, const std::string& animationName)
@@ -40,8 +41,16 @@ void Character::update(sf::Time deltaTime)
 {
     const bool hasChangeFrame = m_animationController.update(deltaTime);
 
-    if (!hasChangeFrame)
+    if (isAttacking() && !m_animationController.isPlaying(ATTACK_ANIMATION))
+    {
+        m_state = State::Grounded;
+        m_animationController.play(IDLE_ANIMATION);
+    }
+    else if (!hasChangeFrame)
+    {
         return;
+    }
+
     updateHitBoxes();
 }
 
@@ -52,8 +61,20 @@ void Character::jump()
     m_animationController.play(JUMP_ANIMATION);
 }
 
+bool Character::attack()
+{
+    if (!isGrounded())
+        return false;
+
+    m_state = State::Attacking;
+    m_animationController.play(ATTACK_ANIMATION);
+}
+
 void Character::move(sf::Vector2f offset, sf::Time deltaTime)
 {
+    if (isAttacking())
+        return;
+
     // Flip sprite to match current direction
     if (offset.x < 0.0f && !isFlipped())
     {

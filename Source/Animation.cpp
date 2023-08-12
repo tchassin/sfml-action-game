@@ -82,6 +82,8 @@ AnimationController::AnimationController(sf::Sprite* target,
 
 bool AnimationController::update(sf::Time deltaTime)
 {
+    m_currentAnimationTime += deltaTime.asSeconds();
+
     return m_currentAnimation.update(deltaTime, m_target);
 }
 
@@ -102,6 +104,7 @@ bool AnimationController::play(const std::string& animationName)
     if (animationData == nullptr)
         return false;
 
+    m_currentAnimationTime = 0.0f;
     m_currentAnimation.reset(animationData);
     m_currentAnimation.getCurrentFrame().apply(m_target);
 
@@ -110,6 +113,8 @@ bool AnimationController::play(const std::string& animationName)
 
 bool AnimationController::isPlaying(const std::string& animationName) const
 {
-    return (m_currentAnimation.getAnimationData() != nullptr)
-        && (m_currentAnimation.getAnimationData()->getName() == animationName);
+    const auto* animation = getCurrentAnimationData();
+    return (animation != nullptr)
+        && (animation->getName() == animationName)
+        && (animation->isLooping() || m_currentAnimationTime <= animation->getDuration());
 }

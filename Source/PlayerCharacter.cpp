@@ -6,6 +6,9 @@ void PlayerCharacter::update(sf::Time deltaTime)
 {
     base::update(deltaTime);
 
+    if (m_remainingAttackWaitTime > 0.0f)
+        m_remainingAttackWaitTime -= deltaTime.asSeconds();
+
     sf::Vector2f movement;
 
     if (PlayerInput::isButtonDown(PlayerInput::Button::Left))
@@ -19,6 +22,16 @@ void PlayerCharacter::update(sf::Time deltaTime)
         {
             jump();
             movement.y -= 1.0f;
+        }
+        else if (PlayerInput::isButtonPressed(PlayerInput::Button::B))
+        {
+            if (canAttack() && m_remainingAttackWaitTime <= 0.0f)
+            {
+                attack();
+
+                m_remainingAttackWaitTime = getAnimationController().getCurrentAnimationData()->getDuration()
+                    + m_attackWaitTime;
+            }
         }
     }
     else if (isJumping())

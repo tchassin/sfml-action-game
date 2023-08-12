@@ -21,6 +21,8 @@ class Character : public GameObject
         Floating,
         // The character is going downward
         Falling,
+        // The character is attacking (ground or mid-air)
+        Attacking,
     };
 
 public:
@@ -29,7 +31,9 @@ public:
 
 public:
     virtual void update(sf::Time deltaTime);
+
     void jump();
+    bool attack();
     void move(sf::Vector2f offset, sf::Time deltaTime);
 
     bool isFlipped() const { return getTransform().getScale().x < 0.0f; }
@@ -37,6 +41,9 @@ public:
     bool isFalling() const { return m_state == State::Falling; }
     bool isFloating() const { return m_state == State::Floating; }
     bool isJumping() const { return m_state == State::Jumping; }
+    bool isAttacking() const { return m_state == State::Attacking; }
+
+    bool canAttack() const { return isGrounded(); }
 
     sf::Vector2f getForwardDirection() const { return sf::Vector2f(isFlipped() ? -1 : 1, 0); }
 
@@ -60,6 +67,9 @@ public:
 
 protected:
     void updateHitBoxes();
+    void flipHitBoxes();
+
+    const AnimationController& getAnimationController() const { return m_animationController; }
 
 #ifdef _DEBUG
     // Inherited via Drawable

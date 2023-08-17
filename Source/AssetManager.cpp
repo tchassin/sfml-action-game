@@ -20,7 +20,7 @@ AssetManager::AssetManager()
 
 AssetManager::~AssetManager()
 {
-    for (auto [path, texture] : m_textures)
+    for (auto& [path, texture] : m_textures)
         delete texture;
 }
 

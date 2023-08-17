@@ -47,7 +47,7 @@
 </data>
  </layer>
  <objectgroup id="4" name="Collisions">
-  <object id="1" x="80" y="52" width="80" height="1"/>
+  <object id="1" x="80" y="52" width="80" height="2"/>
   <object id="2" x="176" y="100" width="64" height="2"/>
   <object id="3" x="0" y="100" width="64" height="2"/>
   <object id="4" x="0" y="148" width="240" height="28"/>

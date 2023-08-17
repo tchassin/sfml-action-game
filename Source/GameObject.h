@@ -2,10 +2,11 @@
 
 #include <string>
 
+#include <SFML/System/Time.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #ifdef _DEBUG
 #include <SFML/Graphics/RectangleShape.hpp>
 #endif // _DEBUG
-#include <SFML/Graphics/Sprite.hpp>
 
 class Game;
 class Level;
@@ -18,6 +19,8 @@ public:
     ~GameObject();
 
 public:
+    virtual void update(sf::Time deltaTime) = 0;
+
     const Game* getOwner() const { return m_owner; }
 
     sf::Transformable& getTransform() { return m_sprite; }

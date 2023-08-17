@@ -2,6 +2,17 @@
 
 #include "PlayerInput.h"
 
+PlayerCharacter::PlayerCharacter(Game* owner)
+    : base(owner, "Knight", "Knight")
+{
+    setRunningSpeed(120.0f);
+    setHorizontalAirSpeed(120.0f);
+    setJumpSpeed(240.0f);
+    setFallSpeed(360.0f);
+    setMinJumpHeight(32.0f);
+    setJumpHeight(80.0f);
+}
+
 void PlayerCharacter::update(sf::Time deltaTime)
 {
     base::update(deltaTime);

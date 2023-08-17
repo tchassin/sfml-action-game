@@ -30,7 +30,7 @@ public:
     virtual ~Character();
 
 public:
-    virtual void update(sf::Time deltaTime);
+    virtual void update(sf::Time deltaTime) override;
 
     void jump();
     bool attack();

@@ -1,5 +1,6 @@
 #include "Level.h"
 
+#include "Orc.h"
 #include "PlayerCharacter.h"
 #include "Game.h"
 #include "Physics.h"
@@ -7,20 +8,41 @@
 
 Level::Level(Game* game)
 {
-    m_playerCharacter = new PlayerCharacter(game, "Knight", "Knight");
+    m_playerCharacter = new PlayerCharacter(game);
     m_playerCharacter->getTransform().setPosition(sf::Vector2f(120, 100));
-    m_playerCharacter->setRunningSpeed(120.0f);
-    m_playerCharacter->setHorizontalAirSpeed(120.0f);
-    m_playerCharacter->setJumpSpeed(240.0f);
-    m_playerCharacter->setFallSpeed(360.0f);
-    m_playerCharacter->setMinJumpHeight(32.0f);
-    m_playerCharacter->setJumpHeight(80.0f);
     m_playerCharacter->moveToLevel(this);
+
+    auto* orc = new Orc(game);
+    orc->getTransform().setPosition(sf::Vector2f(120, 100));
+    orc->moveToLevel(this);
+    m_gameObjects.push_back(orc);
+
+    orc = new Orc(game);
+    orc->getTransform().setPosition(sf::Vector2f(32, 100));
+    orc->setPatrolArea(4, 60);
+    orc->moveToLevel(this);
+    m_gameObjects.push_back(orc);
+
+    orc = new Orc(game);
+    orc->getTransform().setPosition(sf::Vector2f(196, 100));
+    orc->setPatrolArea(180, 236);
+    orc->moveToLevel(this);
+    m_gameObjects.push_back(orc);
+
+    orc = new Orc(game);
+    orc->getTransform().setPosition(sf::Vector2f(120, 52));
+    orc->setPatrolArea(84, 156);
+    orc->moveToLevel(this);
+    m_gameObjects.push_back(orc);
 }
 
 Level::~Level()
 {
     clearMapLayers();
+
+    delete m_playerCharacter;
+    for (auto* gameObject : m_gameObjects)
+        delete gameObject;
 }
 
 void Level::clearMapLayers()
@@ -49,6 +71,9 @@ void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
 #endif // _DEBUG
 
     // Draw characters
+    for (auto* gameObject : m_gameObjects)
+        target.draw(*gameObject, states);
+
     if (m_playerCharacter != nullptr)
         target.draw(*m_playerCharacter, states);
 }
@@ -56,6 +81,9 @@ void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
 void Level::update(sf::Time deltaTime)
 {
     m_playerCharacter->update(deltaTime);
+
+    for (GameObject* gameObject : m_gameObjects)
+        gameObject->update(deltaTime);
 }
 
 bool Level::loadMap(const std::string& mapName)

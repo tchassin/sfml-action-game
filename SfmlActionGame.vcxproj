@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Orc.cpp" />
     <ClCompile Include="Source\PlayerCharacter.cpp" />
     <ClCompile Include="Source\Level.cpp" />
     <ClCompile Include="Source\AssetManager.cpp" />
@@ -30,6 +31,7 @@
     <ClCompile Include="Source\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Orc.h" />
     <ClInclude Include="Source\Math.h" />
     <ClInclude Include="Source\PlayerCharacter.h" />
     <ClInclude Include="Source\Level.h" />

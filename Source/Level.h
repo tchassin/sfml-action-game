@@ -9,8 +9,9 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #endif // _DEBUG
 
-class PlayerCharacter;
 class Game;
+class GameObject;
+class PlayerCharacter;
 
 class Level : public sf::Drawable
 {
@@ -43,6 +44,7 @@ private:
     MapLayer* m_backgroundTiles = nullptr;
     MapLayer* m_foregroundTiles = nullptr;
     PlayerCharacter* m_playerCharacter = nullptr;
+    std::vector<GameObject*> m_gameObjects;
 #ifdef _DEBUG
     std::vector<sf::RectangleShape> m_debugRects;
 #endif // _DEBUG

@@ -11,9 +11,11 @@ AssetManager::AssetManager()
 {
     // Load all textures
     loadTexture("Knight.png", "Knight");
+    loadTexture("Orc.png", "Orc");
 
     // Load all animations
     loadAnimations("Knight.json", "Knight");
+    loadAnimations("Orc.json", "Orc");
 }
 
 AssetManager::~AssetManager()

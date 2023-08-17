@@ -82,6 +82,8 @@ AnimationController::AnimationController(sf::Sprite* target,
 
 bool AnimationController::update(sf::Time deltaTime)
 {
+    deltaTime *= m_playbackSpeed;
+
     m_currentAnimationTime += deltaTime.asSeconds();
 
     return m_currentAnimation.update(deltaTime, m_target);

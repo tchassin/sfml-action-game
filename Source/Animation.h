@@ -97,6 +97,9 @@ public:
     bool play(const std::string& animationName);
     bool isPlaying(const std::string& animationName) const;
 
+    f32 getPlaybackSpeed() const { return m_playbackSpeed; }
+    void setPlaybackSpeed(f32 playbackSpeed) { m_playbackSpeed = playbackSpeed; }
+
     void setTarget(sf::Sprite* target) { m_target = target; }
     void setAnimations(const std::unordered_map<std::string, const AnimationData*>& animations) { m_animations = animations; }
 
@@ -107,6 +110,7 @@ public:
 private:
     sf::Sprite* m_target = nullptr;
     std::unordered_map<std::string, const AnimationData*> m_animations;
+    f32 m_playbackSpeed = 1.0f;
     f32 m_currentAnimationTime = 0.0f;
     Animation m_currentAnimation;
 };

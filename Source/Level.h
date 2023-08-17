@@ -9,6 +9,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #endif // _DEBUG
 
+class Character;
 class Game;
 class GameObject;
 class PlayerCharacter;
@@ -32,11 +33,22 @@ public:
     PlayerCharacter* getPlayerCharacter() { return m_playerCharacter; }
     const PlayerCharacter* getPlayerCharacter() const { return m_playerCharacter; }
 
+    const std::vector<Character*>& getEnemies() const { return m_enemies; }
+    const std::vector<GameObject*>& getGameObjects() const { return m_gameObjects; }
+
 protected:
     void clearMapLayers();
 
     // Inherited via Drawable
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+private:
+    // Check the player hurtboxes against enemy hitboxes and return if any enemy was hit
+    // N.B.: This will check all collisions will all enemies
+    bool resolvePlayerAttack();
+    // Check the enemy hurtboxes against player hitbox and return if the player was hit
+    // N.B.: The player can only be hit once per frame
+    bool resolveEnemyAttacks();
 
 private:
     tmx::Map m_map;
@@ -45,6 +57,7 @@ private:
     MapLayer* m_foregroundTiles = nullptr;
     PlayerCharacter* m_playerCharacter = nullptr;
     std::vector<GameObject*> m_gameObjects;
+    std::vector<Character*> m_enemies;
 #ifdef _DEBUG
     std::vector<sf::RectangleShape> m_debugRects;
 #endif // _DEBUG

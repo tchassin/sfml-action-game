@@ -44,6 +44,9 @@ void GameObject::setHitBox(const sf::FloatRect& hitBox)
 
 void GameObject::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+    if (isDestroyed())
+        return;
+
     target.draw(m_sprite, states);
 #ifdef _DEBUG
     target.draw(m_hitBoxDebugRect, states);

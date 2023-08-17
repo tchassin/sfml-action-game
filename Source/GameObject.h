@@ -35,6 +35,9 @@ public:
     const sf::FloatRect& getHitBox() const { return m_hitBox; }
     void setHitBox(const sf::FloatRect& hitBox);
 
+    void destroy() { m_isDestroyed = true; }
+    bool isDestroyed() const { return m_isDestroyed; }
+
 protected:
     // Inherited via Drawable
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -50,5 +53,6 @@ private:
     sf::Sprite m_sprite;
     // Axis-Aligned Bounding Boxes (AABB) used to detect incoming collisions
     sf::FloatRect m_hitBox;
+    bool m_isDestroyed = false;
 };
 

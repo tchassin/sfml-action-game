@@ -65,6 +65,8 @@ public:
     f32 getMinJumpHeight() const { return m_minJumpHeight; }
     void setMinJumpHeight(f32 height) { m_minJumpHeight = height; }
 
+    const std::vector<sf::FloatRect> getHurtBoxes() const { return m_hurtBoxes; }
+
 protected:
     void updateHitBoxes();
     void flipHitBoxes();

@@ -68,6 +68,8 @@ bool Character::attack()
 
     m_state = State::Attacking;
     m_animationController.play(ATTACK_ANIMATION);
+
+    return true;
 }
 
 void Character::move(sf::Vector2f offset, sf::Time deltaTime)
